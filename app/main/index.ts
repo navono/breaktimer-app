@@ -139,8 +139,8 @@ app.on("ready", async () => {
     // Show settings window on first launch instead of notification
     createSettingsWindow();
     // Don't set app as initialized yet - we'll do that after the user dismisses the modal
-  } else {
-    // App has been initialized before, don't show settings automatically
+  } else if (process.env.NODE_ENV === "development") {
+    createSettingsWindow();
   }
 
   initBreaks();
