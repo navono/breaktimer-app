@@ -99,6 +99,18 @@ const migrations: Migration[] = [
       return settings;
     },
   },
+  {
+    version: 3,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    migrate: (settings: any) => {
+      // Language migration
+      if (!settings.language) {
+        console.log("Adding default language setting");
+        settings.language = "EN";
+      }
+      return settings;
+    },
+  },
 ];
 
 const store = new Store({

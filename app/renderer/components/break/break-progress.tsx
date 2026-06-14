@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import moment from "moment";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Settings, SoundType } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 import { TimeRemaining } from "./utils";
 
 interface BreakProgressProps {
@@ -149,7 +150,7 @@ export function BreakProgress({
               borderColor: "rgba(255, 255, 255, 0.2)",
             }}
           >
-            {progress < 0.5 ? "Cancel Break" : "End Break"}
+            {progress < 0.5 ? t("cancelBreak") : t("endBreak")}
           </Button>
         )}
       </div>

@@ -3,6 +3,7 @@ import { Slider } from "@/components/ui/slider";
 import SettingsCard from "./settings-card";
 import { SoundSelect } from "../sound-select";
 import { Settings, SoundType } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 
 interface AudioCardProps {
   settingsDraft: Settings;
@@ -16,10 +17,10 @@ export default function AudioCard({
   onSliderChange,
 }: AudioCardProps) {
   return (
-    <SettingsCard title="Audio">
+    <SettingsCard title={t("audio")}>
       <div className="grid grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Break sound</Label>
+          <Label className="text-sm font-medium">{t("breakSound")}</Label>
           <SoundSelect
             value={settingsDraft.soundType}
             onChange={onSoundTypeChange}
@@ -27,7 +28,7 @@ export default function AudioCard({
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Break sound volume</Label>
+          <Label className="text-sm font-medium">{t("breakSoundVolume")}</Label>
           <div className="px-2">
             <Slider
               min={0}

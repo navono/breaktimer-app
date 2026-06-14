@@ -4,9 +4,11 @@ import { Switch } from "@/components/ui/switch";
 import {
   DayConfig,
   defaultWorkingRange,
+  dayLabels,
   WorkingHours,
   WorkingHoursRange,
 } from "../../../types/settings";
+import { getLanguage } from "../../lib/i18n";
 import TimeRange from "./time-range";
 
 interface DaySettingsProps {
@@ -46,6 +48,8 @@ export default function DaySettings({
     onChange({ ...workingHours, ranges: newRanges });
   };
 
+  const lang = getLanguage();
+
   return (
     <FormGroup>
       <div className="flex gap-8">
@@ -57,7 +61,7 @@ export default function DaySettings({
             }
             disabled={disabled}
           />
-          <Label>{day.label}</Label>
+          <Label>{dayLabels[lang][day.key]}</Label>
         </div>
         {workingHours.enabled && (
           <>

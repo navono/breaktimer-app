@@ -1,5 +1,6 @@
 import SettingsCard from "./settings-card";
 import { Settings } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 
 interface SkipCardProps {
   settingsDraft: Settings;
@@ -12,8 +13,8 @@ export default function SkipCard({
 }: SkipCardProps) {
   return (
     <SettingsCard
-      title="Skip"
-      helperText="Allow skipping breaks entirely without rescheduling them."
+      title={t("skip")}
+      helperText={t("skipHelper")}
       toggle={{
         checked:
           settingsDraft.skipBreakEnabled &&

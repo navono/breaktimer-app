@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { t } from "../../lib/i18n";
 
 interface Props {
   handleSave: () => void;
@@ -13,12 +14,14 @@ export default function SettingsHeader(props: Props) {
     <div className="border-b border-border bg-background">
       <nav className="flex items-center justify-between p-4 h-16 min-h-16">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+          <h1 className="text-2xl font-bold text-foreground">
+            {t("settings")}
+          </h1>
         </div>
         {showSave && (
           <div className="flex items-center">
             <Button variant="outline" onClick={handleSave}>
-              Save
+              {t("save")}
             </Button>
           </div>
         )}
@@ -29,11 +32,15 @@ export default function SettingsHeader(props: Props) {
             processEnv.SNAP === undefined ? "grid-cols-4" : "grid-cols-3"
           }`}
         >
-          <TabsTrigger value="break-settings">General</TabsTrigger>
-          <TabsTrigger value="working-hours">Working Hours</TabsTrigger>
-          <TabsTrigger value="customization">Customization</TabsTrigger>
+          <TabsTrigger value="break-settings">{t("tabGeneral")}</TabsTrigger>
+          <TabsTrigger value="working-hours">
+            {t("tabWorkingHours")}
+          </TabsTrigger>
+          <TabsTrigger value="customization">
+            {t("tabCustomization")}
+          </TabsTrigger>
           {processEnv.SNAP === undefined && (
-            <TabsTrigger value="system">System</TabsTrigger>
+            <TabsTrigger value="system">{t("tabSystem")}</TabsTrigger>
           )}
         </TabsList>
       </div>

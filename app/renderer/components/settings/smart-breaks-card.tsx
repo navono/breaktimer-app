@@ -3,6 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import SettingsCard from "./settings-card";
 import TimeInput from "./time-input";
 import { Settings } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 
 interface SmartBreaksCardProps {
   settingsDraft: Settings;
@@ -17,8 +18,8 @@ export default function SmartBreaksCard({
 }: SmartBreaksCardProps) {
   return (
     <SettingsCard
-      title="Smart Breaks"
-      helperText="Automatically detect natural breaks and reset the break timer."
+      title={t("smartBreaks")}
+      helperText={t("smartBreaksHelper")}
       toggle={{
         checked: settingsDraft.idleResetEnabled,
         onCheckedChange: (checked) =>
@@ -27,7 +28,7 @@ export default function SmartBreaksCard({
     >
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Minimum idle time</Label>
+          <Label className="text-sm font-medium">{t("minimumIdleTime")}</Label>
           <TimeInput
             precision="seconds"
             value={settingsDraft.idleResetLengthSeconds}
@@ -49,7 +50,7 @@ export default function SmartBreaksCard({
             }
             disabled={!settingsDraft.idleResetEnabled}
           />
-          <Label>Show notification when break automatically detected</Label>
+          <Label>{t("idleNotificationLabel")}</Label>
         </div>
       </div>
     </SettingsCard>

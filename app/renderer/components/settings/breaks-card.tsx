@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { NotificationType, Settings } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 import SettingsCard from "./settings-card";
 import TimeInput from "./time-input";
 
@@ -32,7 +33,7 @@ export default function BreaksCard({
 }: BreaksCardProps) {
   return (
     <SettingsCard
-      title="Breaks"
+      title={t("breaks")}
       toggle={{
         checked: settingsDraft.breaksEnabled,
         onCheckedChange: (checked) => onSwitchChange("breaksEnabled", checked),
@@ -41,7 +42,7 @@ export default function BreaksCard({
       <div className="space-y-4">
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Type</Label>
+            <Label className="text-sm font-medium">{t("type")}</Label>
             <Select
               value={settingsDraft.notificationType}
               onValueChange={onNotificationTypeChange}
@@ -52,16 +53,16 @@ export default function BreaksCard({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={NotificationType.Popup}>
-                  Popup break
+                  {t("popupBreak")}
                 </SelectItem>
                 <SelectItem value={NotificationType.Notification}>
-                  Simple notification
+                  {t("simpleNotification")}
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Frequency</Label>
+            <Label className="text-sm font-medium">{t("frequency")}</Label>
             <TimeInput
               precision="seconds"
               value={settingsDraft.breakFrequencySeconds}
@@ -76,7 +77,7 @@ export default function BreaksCard({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Length</Label>
+            <Label className="text-sm font-medium">{t("length")}</Label>
             <TimeInput
               precision="seconds"
               value={settingsDraft.breakLengthSeconds}
@@ -95,7 +96,7 @@ export default function BreaksCard({
           </div>
         </div>
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Title</Label>
+          <Label className="text-sm font-medium">{t("title")}</Label>
           <Input
             id="break-title"
             className="text-sm"
@@ -105,7 +106,7 @@ export default function BreaksCard({
           />
         </div>
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Message</Label>
+          <Label className="text-sm font-medium">{t("message")}</Label>
           <Textarea
             id="break-message"
             className="text-sm resize-none"
@@ -113,7 +114,7 @@ export default function BreaksCard({
             value={settingsDraft.breakMessage}
             onChange={onTextChange.bind(null, "breakMessage")}
             disabled={!settingsDraft.breaksEnabled}
-            placeholder="Enter your break message..."
+            placeholder={t("breakMessagePlaceholder")}
           />
         </div>
       </div>

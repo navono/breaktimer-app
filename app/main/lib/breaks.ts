@@ -10,6 +10,7 @@ import {
   SoundType,
 } from "../../types/settings";
 import { sendIpc } from "./ipc";
+import { t } from "./i18n";
 import { showNotification } from "./notifications";
 import { getSettings } from "./store";
 import { buildTray } from "./tray";
@@ -138,10 +139,10 @@ function createIdleNotification() {
 
   if (settings.idleResetNotification) {
     showNotification(
-      "Break automatically detected",
-      `Away for ${zeroPad(idleHours)}:${zeroPad(idleMinutes)}:${zeroPad(
-        idleSeconds,
-      )}`,
+      t("breakAutoDetected"),
+      t("awayFor", {
+        time: `${zeroPad(idleHours)}:${zeroPad(idleMinutes)}:${zeroPad(idleSeconds)}`,
+      }),
     );
   }
 }
@@ -227,7 +228,7 @@ function doBreak(): void {
   }
 
   if (settings.notificationType === NotificationType.Notification) {
-    showNotification("Time for a break!", stripHtml(settings.breakMessage));
+    showNotification(t("timeForABreak"), stripHtml(settings.breakMessage));
     if (settings.soundType !== SoundType.None) {
       sendIpc(
         IpcChannel.SoundStartPlay,
@@ -247,7 +248,10 @@ function doBreak(): void {
   buildTray();
 }
 
-function checkInWorkingHoursAt(now: moment.Moment, settings: Settings): boolean {
+function checkInWorkingHoursAt(
+  now: moment.Moment,
+  settings: Settings,
+): boolean {
   if (!settings.workingHoursEnabled) {
     return true;
   }

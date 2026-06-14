@@ -1,13 +1,27 @@
+import { Language } from "../../../types/settings";
+import { getLanguage, t } from "../../lib/i18n";
+
 export function formatTimeSinceLastBreak(seconds: number): string {
+  const lang = getLanguage();
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
 
+  if (lang === Language.Zh) {
+    if (hours > 0) {
+      return `${hours}小时${minutes > 0 ? ` ${minutes}分钟` : ""}${t("sinceLastBreak")}`;
+    } else if (minutes > 0) {
+      return `${minutes}分钟${t("sinceLastBreak")}`;
+    } else {
+      return t("lessThan1mSinceLastBreak");
+    }
+  }
+
   if (hours > 0) {
-    return `${hours}h${minutes > 0 ? ` ${minutes}m` : ""} since last break`;
+    return `${hours}h${minutes > 0 ? ` ${minutes}m` : ""} ${t("sinceLastBreak")}`;
   } else if (minutes > 0) {
-    return `${minutes}m since last break`;
+    return `${minutes}m ${t("sinceLastBreak")}`;
   } else {
-    return "Less than 1m since last break";
+    return t("lessThan1mSinceLastBreak");
   }
 }
 

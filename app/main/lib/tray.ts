@@ -12,6 +12,7 @@ import {
   isHavingBreak,
   startBreakNow,
 } from "./breaks";
+import { t } from "./i18n";
 import {
   getDisableEndTime,
   getSettings,
@@ -197,11 +198,11 @@ export function buildTray(): void {
 
   if (minsLeft !== undefined) {
     if (minsLeft > 1) {
-      nextBreak = `Next break in ${minsLeft} minutes`;
+      nextBreak = t("nextBreakInMinutes", { minutes: minsLeft });
     } else if (minsLeft === 1) {
-      nextBreak = `Next break in 1 minute`;
+      nextBreak = t("nextBreakIn1Minute");
     } else {
-      nextBreak = `Next break in less than a minute`;
+      nextBreak = t("nextBreakInLessThanAMinute");
     }
   }
 
@@ -218,36 +219,45 @@ export function buildTray(): void {
       enabled: false,
     },
     {
-      label: `Disabled for ${getDisableTimeRemaining()}`,
+      label: t("disabledFor", { time: getDisableTimeRemaining() }),
       visible: disableEndTime !== null && !breaksEnabled,
       enabled: false,
     },
     {
-      label: `Outside of working hours`,
+      label: t("outsideOfWorkingHours"),
       visible: !inWorkingHours,
       enabled: false,
     },
     {
-      label: `Idle`,
+      label: t("idle"),
       visible: idle,
       enabled: false,
     },
     { type: "separator" },
     {
-      label: "Enable",
+      label: t("enable"),
       click: setBreaksEnabled.bind(null, true),
       visible: !breaksEnabled,
     },
     {
-      label: "Disable...",
+      label: t("disable"),
       submenu: [
-        { label: "Indefinitely", click: disableIndefinitely },
-        { label: "30 minutes", click: () => disableBreaksFor(30 * 60 * 1000) },
-        { label: "1 hour", click: () => disableBreaksFor(60 * 60 * 1000) },
-        { label: "2 hours", click: () => disableBreaksFor(2 * 60 * 60 * 1000) },
-        { label: "4 hours", click: () => disableBreaksFor(4 * 60 * 60 * 1000) },
+        { label: t("indefinitely"), click: disableIndefinitely },
         {
-          label: "Rest of day",
+          label: t("thirtyMinutes"),
+          click: () => disableBreaksFor(30 * 60 * 1000),
+        },
+        { label: t("oneHour"), click: () => disableBreaksFor(60 * 60 * 1000) },
+        {
+          label: t("twoHours"),
+          click: () => disableBreaksFor(2 * 60 * 60 * 1000),
+        },
+        {
+          label: t("fourHours"),
+          click: () => disableBreaksFor(4 * 60 * 60 * 1000),
+        },
+        {
+          label: t("restOfDay"),
           click: () => {
             const now = new Date();
             const endOfDay = new Date(
@@ -265,7 +275,7 @@ export function buildTray(): void {
       visible: breaksEnabled,
     },
     {
-      label: "Start break now",
+      label: t("startBreakNow"),
       visible: breakTime !== null && inWorkingHours && !havingBreak,
       click: () => {
         log.info("Start break now selected");
@@ -273,9 +283,9 @@ export function buildTray(): void {
       },
     },
     { type: "separator" },
-    { label: "Settings...", click: createSettingsWindow },
-    { label: "About...", click: createAboutWindow },
-    { label: "Quit", click: quit },
+    { label: t("settings"), click: createSettingsWindow },
+    { label: t("about"), click: createAboutWindow },
+    { label: t("quit"), click: quit },
   ]);
 
   // Call this again for Linux because we modified the context menu

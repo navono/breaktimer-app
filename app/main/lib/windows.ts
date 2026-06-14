@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen } from "electron";
 import log from "electron-log";
 import path from "path";
 import { endPopupBreak } from "./breaks";
+import { t } from "./i18n";
 import { getSettings } from "./store";
 
 let settingsWindow: BrowserWindow | null = null;
@@ -42,7 +43,7 @@ export function createSettingsWindow(): void {
   }
 
   settingsWindow = new BrowserWindow({
-    title: "BreakTimer — Settings",
+    title: t("settingsWindowTitle"),
     show: false,
     width: 580,
     minWidth: 580,

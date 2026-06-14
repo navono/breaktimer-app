@@ -1,16 +1,19 @@
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useEffect, useMemo, useState } from "react";
 import {
+  Language,
   NotificationType,
   Settings,
   SoundType,
   TrayTextMode,
 } from "../../types/settings";
+import { setLanguage, t } from "../lib/i18n";
 import { toast } from "../toaster";
 import AdvancedCard from "./settings/advanced-card";
 import AudioCard from "./settings/audio-card";
 import BackdropCard from "./settings/backdrop-card";
 import BreaksCard from "./settings/breaks-card";
+import LanguageCard from "./settings/language-card";
 import SettingsCard from "./settings/settings-card";
 import SettingsHeader from "./settings/settings-header";
 import SkipCard from "./settings/skip-card";
@@ -30,6 +33,7 @@ export default function SettingsEl() {
   useEffect(() => {
     (async () => {
       const settings = (await ipcRenderer.invokeGetSettings()) as Settings;
+      setLanguage(settings.language);
       setSettingsDraft(settings);
       setSettings(settings);
 
@@ -139,9 +143,15 @@ export default function SettingsEl() {
     });
   };
 
+  const handleLanguageChange = (language: Language): void => {
+    setLanguage(language);
+    setSettingsDraft({ ...settingsDraft, language });
+  };
+
   const handleSave = async () => {
     await ipcRenderer.invokeSetSettings(settingsDraft);
-    toast("Settings saved");
+    setLanguage(settingsDraft.language);
+    toast(t("settingsSaved"));
     setSettings(settingsDraft);
   };
 
@@ -188,8 +198,8 @@ export default function SettingsEl() {
 
           <TabsContent value="working-hours" className="m-0 space-y-6">
             <SettingsCard
-              title="Working Hours"
-              helperText="Only show breaks during your configured work schedule."
+              title={t("workingHours")}
+              helperText={t("workingHoursHelper")}
               toggle={{
                 checked: settingsDraft.workingHoursEnabled,
                 onCheckedChange: (checked) =>
@@ -226,6 +236,10 @@ export default function SettingsEl() {
 
           {processEnv.SNAP === undefined && (
             <TabsContent value="system" className="m-0 space-y-6">
+              <LanguageCard
+                settingsDraft={settingsDraft}
+                onLanguageChange={handleLanguageChange}
+              />
               <StartupCard
                 settingsDraft={settingsDraft}
                 onSwitchChange={handleSwitchChange}

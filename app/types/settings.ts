@@ -22,12 +22,18 @@ export enum SoundType {
   Scifi = "SCIFI",
 }
 
+export enum Language {
+  En = "EN",
+  Zh = "ZH",
+}
+
 export enum TrayTextMode {
   TimeToNextBreak = "TIME_TO_NEXT_BREAK",
   TimeSinceLastBreak = "TIME_SINCE_LAST_BREAK",
 }
 
 export interface Settings {
+  language: Language;
   autoLaunch: boolean;
   breaksEnabled: boolean;
   trayTextEnabled: boolean;
@@ -68,6 +74,7 @@ export const defaultWorkingRange: WorkingHoursRange = {
 };
 
 export const defaultSettings: Settings = {
+  language: Language.En,
   autoLaunch: true,
   breaksEnabled: true,
   trayTextEnabled: true,
@@ -144,3 +151,24 @@ export const daysConfig: DayConfig[] = [
   { key: "workingHoursSaturday", label: "Saturday" },
   { key: "workingHoursSunday", label: "Sunday" },
 ];
+
+export const dayLabels: Record<Language, Record<string, string>> = {
+  [Language.En]: {
+    workingHoursMonday: "Monday",
+    workingHoursTuesday: "Tuesday",
+    workingHoursWednesday: "Wednesday",
+    workingHoursThursday: "Thursday",
+    workingHoursFriday: "Friday",
+    workingHoursSaturday: "Saturday",
+    workingHoursSunday: "Sunday",
+  },
+  [Language.Zh]: {
+    workingHoursMonday: "周一",
+    workingHoursTuesday: "周二",
+    workingHoursWednesday: "周三",
+    workingHoursThursday: "周四",
+    workingHoursFriday: "周五",
+    workingHoursSaturday: "周六",
+    workingHoursSunday: "周日",
+  },
+};

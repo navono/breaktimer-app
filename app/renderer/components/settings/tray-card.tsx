@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Settings, TrayTextMode } from "../../../types/settings";
+import { t } from "../../lib/i18n";
 import SettingsCard from "./settings-card";
 
 interface TrayCardProps {
@@ -22,15 +23,15 @@ export default function TrayCard({
 }: TrayCardProps) {
   return (
     <SettingsCard
-      title="Menu Bar Text"
-      helperText="Show timing information next to the menu bar icon."
+      title={t("menuBarText")}
+      helperText={t("menuBarTextHelper")}
       toggle={{
         checked: settingsDraft.trayTextEnabled,
         onCheckedChange: (checked) =>
           onSwitchChange("trayTextEnabled", checked),
       }}
     >
-      <FormGroup label="Text">
+      <FormGroup label={t("text")}>
         <Select
           value={settingsDraft.trayTextMode}
           disabled={!settingsDraft.trayTextEnabled}
@@ -41,10 +42,10 @@ export default function TrayCard({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={TrayTextMode.TimeToNextBreak}>
-              Time to next break
+              {t("timeToNextBreak")}
             </SelectItem>
             <SelectItem value={TrayTextMode.TimeSinceLastBreak}>
-              Time since last break
+              {t("timeSinceLastBreak")}
             </SelectItem>
           </SelectContent>
         </Select>
