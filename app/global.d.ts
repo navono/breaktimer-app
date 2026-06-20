@@ -15,6 +15,10 @@ declare const ipcRenderer: {
   invokeBreakEnd: () => Promise<void>;
   invokeGetWorkMode: () => Promise<string>;
   invokeSetWorkMode: (mode: string) => Promise<void>;
+  invokeGetWorkModeStats: (
+    from?: string,
+    to?: string,
+  ) => Promise<{ mode: string; start: string; duration: number }[]>;
   onPlayEndSound: (
     cb: (type: string, volume?: number) => void,
   ) => Promise<void>;

@@ -20,6 +20,7 @@ import SkipCard from "./settings/skip-card";
 import SmartBreaksCard from "./settings/smart-breaks-card";
 import SnoozeCard from "./settings/snooze-card";
 import StartupCard from "./settings/startup-card";
+import StatsView from "./stats/stats-view";
 import ThemeCard from "./settings/theme-card";
 import TrayCard from "./settings/tray-card";
 import WorkModeCard from "./settings/work-mode-card";
@@ -229,6 +230,10 @@ export default function SettingsEl() {
                 setSettingsDraft={setSettingsDraft}
               />
             </SettingsCard>
+          </TabsContent>
+
+          <TabsContent value="statistics" className="m-0">
+            <StatsView />
           </TabsContent>
 
           <TabsContent value="customization" className="m-0 space-y-8">

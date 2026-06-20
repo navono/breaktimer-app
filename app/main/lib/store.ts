@@ -133,8 +133,14 @@ const store = new Store({
     appInitialized: false,
     settingsVersion: 0,
     disableEndTime: null,
+    workModeStats: [],
   },
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getStore(): any {
+  return store;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function migrateSettings(settings: any): Settings {

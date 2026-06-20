@@ -63,6 +63,9 @@ process.once("loaded", () => {
     invokeSetWorkMode: (mode) => {
       return ipcRenderer.invoke("WORK_MODE_SET", mode);
     },
+    invokeGetWorkModeStats: (from, to) => {
+      return ipcRenderer.invoke("WORK_MODE_STATS_GET", from, to);
+    },
     onPlayStartSound: (cb) => {
       ipcRenderer.on("SOUND_START_PLAY", (_event, type, volume = 1) => {
         cb(type, volume);

@@ -29,13 +29,14 @@ export default function SettingsHeader(props: Props) {
       <div className="px-4 pb-4">
         <TabsList
           className={`grid w-full ${
-            processEnv.SNAP === undefined ? "grid-cols-4" : "grid-cols-3"
+            processEnv.SNAP === undefined ? "grid-cols-5" : "grid-cols-4"
           }`}
         >
           <TabsTrigger value="break-settings">{t("tabGeneral")}</TabsTrigger>
           <TabsTrigger value="working-hours">
             {t("tabWorkingHours")}
           </TabsTrigger>
+          <TabsTrigger value="statistics">{t("tabStatistics")}</TabsTrigger>
           <TabsTrigger value="customization">
             {t("tabCustomization")}
           </TabsTrigger>

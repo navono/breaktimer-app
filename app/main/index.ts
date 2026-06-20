@@ -3,9 +3,10 @@ import electronDebug from "electron-debug";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import { setAutoLauch } from "./lib/auto-launch";
-import { initBreaks } from "./lib/breaks";
+import { finalizeCurrentWorkPeriod, initBreaks } from "./lib/breaks";
 import "./lib/ipc";
 import { showNotification } from "./lib/notifications";
+import { pruneOldStats } from "./lib/stats";
 import { getAppInitialized } from "./lib/store";
 import { initTray } from "./lib/tray";
 import { createSettingsWindow, createSoundsWindow } from "./lib/windows";
@@ -146,6 +147,11 @@ app.on("ready", async () => {
   initBreaks();
   initTray();
   createSoundsWindow();
+  pruneOldStats();
+
+  app.on("before-quit", () => {
+    finalizeCurrentWorkPeriod();
+  });
 
   if (process.env.NODE_ENV !== "development") {
     checkForUpdates();

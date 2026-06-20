@@ -264,6 +264,37 @@ const translations: Translations = {
     [Language.En]: "Next: {mode} mode",
     [Language.Zh]: "休息后: {mode}模式",
   },
+
+  // Statistics
+  tabStatistics: {
+    [Language.En]: "Statistics",
+    [Language.Zh]: "统计",
+  },
+  statsPeriodDay: { [Language.En]: "Day", [Language.Zh]: "日" },
+  statsPeriodWeek: { [Language.En]: "Week", [Language.Zh]: "周" },
+  statsPeriodMonth: { [Language.En]: "Month", [Language.Zh]: "月" },
+  statsPeriodYear: { [Language.En]: "Year", [Language.Zh]: "年" },
+  statsSittingTime: {
+    [Language.En]: "Sitting time",
+    [Language.Zh]: "坐姿时长",
+  },
+  statsStandingTime: {
+    [Language.En]: "Standing time",
+    [Language.Zh]: "站姿时长",
+  },
+  statsRatio: { [Language.En]: "Ratio", [Language.Zh]: "比例" },
+  statsNoData: {
+    [Language.En]: "No data for this period",
+    [Language.Zh]: "该时段无数据",
+  },
+  statsWorkMode: {
+    [Language.En]: "Work Mode",
+    [Language.Zh]: "办公模式",
+  },
+  statsEnableWorkMode: {
+    [Language.En]: "Enable Work Mode to start tracking",
+    [Language.Zh]: "启用办公模式以开始记录",
+  },
 };
 
 export function t(

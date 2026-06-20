@@ -56,7 +56,7 @@ export default function TimeInput({
           ? prev.seconds
           : seconds.toString().padStart(2, "0"),
     }));
-  }, [value, precision, focusedField]);
+  }, [safeValue, precision, focusedField]);
 
   const handleChange = (
     field: "hours" | "minutes" | "seconds",

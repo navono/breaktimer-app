@@ -13,6 +13,7 @@ import {
 import { sendIpc } from "./ipc";
 import { t } from "./i18n";
 import { showNotification } from "./notifications";
+import { recordWorkModeSession } from "./stats";
 import { getSettings } from "./store";
 import { buildTray } from "./tray";
 import { createBreakWindows } from "./windows";
@@ -38,6 +39,7 @@ let startedFromTray = false;
 let lastCompletedBreakTime: Date | null = new Date();
 let currentBreakStartTime: Date | null = null;
 let currentWorkMode: WorkMode = WorkMode.Sitting;
+let workPeriodStart: Date | null = null;
 
 export function getWorkMode(): WorkMode {
   return currentWorkMode;
@@ -187,6 +189,11 @@ export function scheduleNextBreak(isPostpone = false): void {
 
   breakTime = moment().add(seconds, "seconds");
 
+  // Track when the current work period starts (for stats recording)
+  if (!isPostpone) {
+    workPeriodStart = new Date();
+  }
+
   log.info(
     `Scheduling next break [isPostpone=${isPostpone}] [seconds=${seconds}] [postponeLength=${settings.postponeLengthSeconds}] [frequency=${settings.breakFrequencySeconds}] [workMode=${settings.workModeEnabled ? currentWorkMode : "off"}] [scheduledFor=${breakTime.format("HH:mm:ss")}]`,
   );
@@ -245,9 +252,30 @@ function alternateWorkMode(): void {
   const settings: Settings = getSettings();
   if (!settings.workModeEnabled) return;
 
+  // Record the completed work period
+  if (workPeriodStart) {
+    const durationSeconds = Math.round(
+      (Date.now() - workPeriodStart.getTime()) / 1000,
+    );
+    recordWorkModeSession(currentWorkMode, workPeriodStart, durationSeconds);
+  }
+
   currentWorkMode =
     currentWorkMode === WorkMode.Sitting ? WorkMode.Standing : WorkMode.Sitting;
+  workPeriodStart = new Date();
   log.info(`Work mode alternated to ${currentWorkMode}`);
+}
+
+export function finalizeCurrentWorkPeriod(): void {
+  if (!workPeriodStart) return;
+  const settings: Settings = getSettings();
+  if (!settings.workModeEnabled) return;
+
+  const durationSeconds = Math.round(
+    (Date.now() - workPeriodStart.getTime()) / 1000,
+  );
+  recordWorkModeSession(currentWorkMode, workPeriodStart, durationSeconds);
+  workPeriodStart = null;
 }
 
 function doBreak(): void {

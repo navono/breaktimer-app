@@ -17,4 +17,5 @@ export enum IpcChannel {
   WasStartedFromTrayGet = "WAS_STARTED_FROM_TRAY_GET",
   WorkModeGet = "WORK_MODE_GET",
   WorkModeSet = "WORK_MODE_SET",
+  WorkModeStatsGet = "WORK_MODE_STATS_GET",
 }

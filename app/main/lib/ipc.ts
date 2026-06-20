@@ -2,6 +2,7 @@ import { BrowserWindow, ipcMain, IpcMainInvokeEvent, screen } from "electron";
 import log from "electron-log";
 import { IpcChannel } from "../../types/ipc";
 import { Settings, SoundType, WorkMode } from "../../types/settings";
+import { WorkModeSession } from "../../types/stats";
 import {
   completeBreakTracking,
   getAllowPostpone,
@@ -19,6 +20,7 @@ import {
   getAppInitialized,
   setAppInitialized,
 } from "./store";
+import { getWorkModeStats } from "./stats";
 import { buildTray } from "./tray";
 import { getWindows } from "./windows";
 
@@ -163,5 +165,17 @@ ipcMain.handle(
   (_event: IpcMainInvokeEvent, mode: WorkMode): void => {
     log.info(IpcChannel.WorkModeSet, mode);
     setWorkModeState(mode);
+  },
+);
+
+ipcMain.handle(
+  IpcChannel.WorkModeStatsGet,
+  (
+    _event: IpcMainInvokeEvent,
+    from?: string,
+    to?: string,
+  ): WorkModeSession[] => {
+    log.info(IpcChannel.WorkModeStatsGet, from, to);
+    return getWorkModeStats(from, to);
   },
 );
