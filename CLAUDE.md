@@ -40,6 +40,7 @@ Core modules in `lib/`:
 - **`store.ts`** — Settings via `electron-store` with a **migration system** (versioned migrations in `store.ts`). Deep-merges with defaults. `resetBreaks` flag prevents scheduling churn when settings update.
 - **`tray.ts`** — Dynamic tray menu and title (macOS). Shows time until next break or time since last break (configurable via `trayTextMode`), status indicators (disabled, outside hours, idle). Supports temporary disable with timeout (e.g., 30 min, 1 hour, rest of day).
 - **`notifications.ts`** — Native OS notifications.
+- **`i18n.ts`** — Simple translation system. `t(key, params?)` looks up translations by key and current language. Translations are inline in this file (not separate JSON files). Supports `Language.En` and `Language.Zh`. Params use `{paramName}` placeholders.
 - **`auto-launch.ts`** — OS auto-startup integration.
 
 ### Renderer Process (`app/renderer/`)
@@ -51,8 +52,9 @@ Entry: `index.tsx`
 Key components:
 
 - **Break** — Notification/break UI with progress tracking. Reports actual break duration back to main via `BreakTrackingComplete`.
-- **Settings** — Complex tabbed form. Settings changes flow: renderer → IPC → main store → tray rebuild.
+- **Settings** — Complex tabbed form with sub-components in `components/settings/` (one card per section: `breaks-card`, `snooze-card`, `skip-card`, `smart-breaks-card`, `working-hours`, `audio-card`, `theme-card`, `backdrop-card`, `tray-card`, `startup-card`, `language-card`, `advanced-card`). Settings changes flow: renderer → IPC → main store → tray rebuild.
 - **WelcomeModal** — First-run experience.
+- **Sounds** — Sound preview/playback UI.
 
 UI stack: React 19, shadcn/ui (Radix UI primitives), Tailwind CSS v4, Framer Motion, Lucide icons.
 
@@ -62,7 +64,7 @@ UI stack: React 19, shadcn/ui (Radix UI primitives), Tailwind CSS v4, Framer Mot
 
 ### Shared Types (`app/types/`)
 
-- **`ipc.ts`** — 16 IPC channel string constants (no complex interfaces, just enum-like strings)
+- **`ipc.ts`** — 18 IPC channel string constants (no complex interfaces, just enum-like strings)
 - **`settings.ts`** — 32-property settings interface with per-day working hours, enums for `NotificationType`, `SoundType`, `TrayTextMode`, and default values
 - **`breaks.ts`** — `BreakTime = Moment | null`
 

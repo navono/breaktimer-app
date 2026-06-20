@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { Settings, SoundType } from "../../types/settings";
+import { Settings, SoundType, WorkMode } from "../../types/settings";
 import { BreakNotification } from "./break/break-notification";
 import { BreakProgress } from "./break/break-progress";
 import { createDarkerRgba } from "./break/utils";
@@ -17,20 +17,28 @@ export default function Break() {
   const [sharedBreakEndTime, setSharedBreakEndTime] = useState<number | null>(
     null,
   );
+  const [nextWorkMode, setNextWorkMode] = useState<WorkMode | null>(null);
 
   useEffect(() => {
     const init = async () => {
-      const [allowPostpone, settings, timeSince, startedFromTray] =
+      const [allowPostpone, settings, timeSince, startedFromTray, workMode] =
         await Promise.all([
           ipcRenderer.invokeGetAllowPostpone(),
           ipcRenderer.invokeGetSettings() as Promise<Settings>,
           ipcRenderer.invokeGetTimeSinceLastBreak(),
           ipcRenderer.invokeWasStartedFromTray(),
+          ipcRenderer.invokeGetWorkMode() as Promise<WorkMode>,
         ]);
 
       setAllowPostpone(allowPostpone);
       setSettings(settings);
       setTimeSinceLastBreak(timeSince);
+
+      if (settings.workModeEnabled && workMode) {
+        setNextWorkMode(
+          workMode === WorkMode.Sitting ? WorkMode.Standing : WorkMode.Sitting,
+        );
+      }
 
       // Skip the countdown if immediately start breaks is enabled or started from tray
       if (settings.immediatelyStartBreaks || startedFromTray) {
@@ -138,6 +146,7 @@ export default function Break() {
             timeSinceLastBreak={timeSinceLastBreak}
             textColor={settings.textColor}
             backgroundColor={settings.backgroundColor}
+            nextWorkMode={nextWorkMode}
           />
         )}
       </div>
@@ -188,6 +197,7 @@ export default function Break() {
             textColor={settings.textColor}
             isClosing={closing}
             sharedBreakEndTime={sharedBreakEndTime}
+            nextWorkMode={nextWorkMode}
           />
         )}
       </motion.div>

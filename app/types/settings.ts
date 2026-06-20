@@ -32,6 +32,11 @@ export enum TrayTextMode {
   TimeSinceLastBreak = "TIME_SINCE_LAST_BREAK",
 }
 
+export enum WorkMode {
+  Sitting = "SITTING",
+  Standing = "STANDING",
+}
+
 export interface Settings {
   language: Language;
   autoLaunch: boolean;
@@ -66,6 +71,9 @@ export interface Settings {
   skipBreakEnabled: boolean;
   postponeBreakEnabled: boolean;
   immediatelyStartBreaks: boolean;
+  workModeEnabled: boolean;
+  sittingFrequencySeconds: number;
+  standingFrequencySeconds: number;
 }
 
 export const defaultWorkingRange: WorkingHoursRange = {
@@ -128,6 +136,9 @@ export const defaultSettings: Settings = {
   skipBreakEnabled: false,
   postponeBreakEnabled: true,
   immediatelyStartBreaks: false,
+  workModeEnabled: false,
+  sittingFrequencySeconds: 40 * 60,
+  standingFrequencySeconds: 34 * 60,
 };
 
 export interface DayConfig {

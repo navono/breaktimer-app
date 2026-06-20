@@ -42,6 +42,10 @@ const translations: Translations = {
     [Language.Zh]: "简单通知",
   },
   frequency: { [Language.En]: "Frequency", [Language.Zh]: "频率" },
+  controlledByWorkMode: {
+    [Language.En]: "Controlled by Work Mode",
+    [Language.Zh]: "由办公模式控制",
+  },
   length: { [Language.En]: "Length", [Language.Zh]: "时长" },
   title: { [Language.En]: "Title", [Language.Zh]: "标题" },
   message: { [Language.En]: "Message", [Language.Zh]: "消息" },
@@ -234,6 +238,31 @@ const translations: Translations = {
   workingHoursHelper: {
     [Language.En]: "Only show breaks during your configured work schedule.",
     [Language.Zh]: "仅在配置的工作时间内显示休息提醒。",
+  },
+
+  // Work mode
+  workMode: {
+    [Language.En]: "Work Mode",
+    [Language.Zh]: "办公模式",
+  },
+  workModeHelper: {
+    [Language.En]:
+      "Alternate between sitting and standing desk modes with different break frequencies.",
+    [Language.Zh]: "在坐姿和站姿办公模式之间交替，每种模式设置不同的休息频率。",
+  },
+  sittingFrequency: {
+    [Language.En]: "Sitting frequency",
+    [Language.Zh]: "坐姿频率",
+  },
+  standingFrequency: {
+    [Language.En]: "Standing frequency",
+    [Language.Zh]: "站姿频率",
+  },
+  sitting: { [Language.En]: "Sitting", [Language.Zh]: "坐姿" },
+  standing: { [Language.En]: "Standing", [Language.Zh]: "站姿" },
+  nextWorkModeAfterBreak: {
+    [Language.En]: "Next: {mode} mode",
+    [Language.Zh]: "休息后: {mode}模式",
   },
 };
 

@@ -74,6 +74,14 @@ const translations: Translations = {
     [Language.En]: "BreakTimer — Settings",
     [Language.Zh]: "BreakTimer — 设置",
   },
+
+  // Work mode
+  sitting: { [Language.En]: "Sitting", [Language.Zh]: "坐姿" },
+  standing: { [Language.En]: "Standing", [Language.Zh]: "站姿" },
+  currentMode: {
+    [Language.En]: "Current: {mode}",
+    [Language.Zh]: "当前: {mode}",
+  },
 };
 
 export function t(

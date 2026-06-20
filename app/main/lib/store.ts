@@ -111,6 +111,20 @@ const migrations: Migration[] = [
       return settings;
     },
   },
+  {
+    version: 4,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    migrate: (settings: any) => {
+      // Work mode migration
+      if (settings.workModeEnabled === undefined) {
+        console.log("Adding default work mode settings");
+        settings.workModeEnabled = false;
+        settings.sittingFrequencySeconds = 40 * 60;
+        settings.standingFrequencySeconds = 34 * 60;
+      }
+      return settings;
+    },
+  },
 ];
 
 const store = new Store({

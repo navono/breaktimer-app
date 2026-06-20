@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import moment from "moment";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Settings, SoundType } from "../../../types/settings";
+import { Settings, SoundType, WorkMode } from "../../../types/settings";
 import { t } from "../../lib/i18n";
 import { TimeRemaining } from "./utils";
 
@@ -15,6 +15,7 @@ interface BreakProgressProps {
   textColor: string;
   isClosing?: boolean;
   sharedBreakEndTime?: number | null;
+  nextWorkMode?: WorkMode | null;
 }
 
 export function BreakProgress({
@@ -26,6 +27,7 @@ export function BreakProgress({
   textColor,
   isClosing = false,
   sharedBreakEndTime = null,
+  nextWorkMode = null,
 }: BreakProgressProps) {
   const [timeRemaining, setTimeRemaining] = useState<TimeRemaining | null>(
     null,
@@ -162,6 +164,19 @@ export function BreakProgress({
       >
         {breakMessage}
       </div>
+
+      {/* Next work mode hint */}
+      {nextWorkMode && (
+        <div
+          className="text-sm opacity-60 font-medium"
+          style={{ color: textColor }}
+        >
+          {t("nextWorkModeAfterBreak", {
+            mode:
+              nextWorkMode === WorkMode.Sitting ? t("sitting") : t("standing"),
+          })}
+        </div>
+      )}
 
       <div className="w-full">
         <div className="flex justify-end items-center mb-2">

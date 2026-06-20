@@ -62,7 +62,14 @@ export default function BreaksCard({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label className="text-sm font-medium">{t("frequency")}</Label>
+            <Label className="text-sm font-medium">
+              {t("frequency")}
+              {settingsDraft.workModeEnabled && (
+                <span className="ml-1 text-xs text-muted-foreground font-normal">
+                  ({t("controlledByWorkMode")})
+                </span>
+              )}
+            </Label>
             <TimeInput
               precision="seconds"
               value={settingsDraft.breakFrequencySeconds}
@@ -73,7 +80,9 @@ export default function BreaksCard({
                 date.setSeconds(seconds % 60);
                 onDateChange("breakFrequency", date);
               }}
-              disabled={!settingsDraft.breaksEnabled}
+              disabled={
+                !settingsDraft.breaksEnabled || settingsDraft.workModeEnabled
+              }
             />
           </div>
           <div className="space-y-2">

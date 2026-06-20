@@ -20,11 +20,12 @@ export default function TimeInput({
   const minutesRef = useRef<HTMLInputElement>(null);
   const secondsRef = useRef<HTMLInputElement>(null);
 
+  const safeValue = value ?? 0;
   const [internalValue, setInternalValue] = useState(() => {
     // Convert seconds to hours, minutes, seconds - pad with leading zeros
-    const hours = Math.floor(value / 3600);
-    const minutes = Math.floor((value % 3600) / 60);
-    const seconds = value % 60;
+    const hours = Math.floor(safeValue / 3600);
+    const minutes = Math.floor((safeValue % 3600) / 60);
+    const seconds = safeValue % 60;
     return {
       hours: hours.toString().padStart(2, "0"),
       minutes: minutes.toString().padStart(2, "0"),
@@ -37,9 +38,9 @@ export default function TimeInput({
 
   // Update internal value when external value changes (but not during user input)
   useEffect(() => {
-    const hours = Math.floor(value / 3600);
-    const minutes = Math.floor((value % 3600) / 60);
-    const seconds = value % 60;
+    const hours = Math.floor(safeValue / 3600);
+    const minutes = Math.floor((safeValue % 3600) / 60);
+    const seconds = safeValue % 60;
 
     setInternalValue((prev) => ({
       hours:

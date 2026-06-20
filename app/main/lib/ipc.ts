@@ -1,13 +1,15 @@
 import { BrowserWindow, ipcMain, IpcMainInvokeEvent, screen } from "electron";
 import log from "electron-log";
 import { IpcChannel } from "../../types/ipc";
-import { Settings, SoundType } from "../../types/settings";
+import { Settings, SoundType, WorkMode } from "../../types/settings";
 import {
   completeBreakTracking,
   getAllowPostpone,
   getBreakLengthSeconds,
   getTimeSinceLastBreak,
+  getWorkMode,
   postponeBreak,
+  setWorkMode as setWorkModeState,
   startBreakTracking,
   wasStartedFromTray,
 } from "./breaks";
@@ -150,3 +152,16 @@ ipcMain.handle(IpcChannel.AppInitializedSet, (): void => {
   log.info(IpcChannel.AppInitializedSet);
   setAppInitialized();
 });
+
+ipcMain.handle(IpcChannel.WorkModeGet, (): WorkMode => {
+  log.info(IpcChannel.WorkModeGet);
+  return getWorkMode();
+});
+
+ipcMain.handle(
+  IpcChannel.WorkModeSet,
+  (_event: IpcMainInvokeEvent, mode: WorkMode): void => {
+    log.info(IpcChannel.WorkModeSet, mode);
+    setWorkModeState(mode);
+  },
+);

@@ -57,6 +57,12 @@ process.once("loaded", () => {
     invokeBreakEnd: () => {
       return ipcRenderer.invoke("BREAK_END");
     },
+    invokeGetWorkMode: () => {
+      return ipcRenderer.invoke("WORK_MODE_GET");
+    },
+    invokeSetWorkMode: (mode) => {
+      return ipcRenderer.invoke("WORK_MODE_SET", mode);
+    },
     onPlayStartSound: (cb) => {
       ipcRenderer.on("SOUND_START_PLAY", (_event, type, volume = 1) => {
         cb(type, volume);

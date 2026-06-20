@@ -22,6 +22,7 @@ import SnoozeCard from "./settings/snooze-card";
 import StartupCard from "./settings/startup-card";
 import ThemeCard from "./settings/theme-card";
 import TrayCard from "./settings/tray-card";
+import WorkModeCard from "./settings/work-mode-card";
 import WorkingHoursSettings from "./settings/working-hours";
 import WelcomeModal from "./welcome-modal";
 
@@ -148,6 +149,16 @@ export default function SettingsEl() {
     setSettingsDraft({ ...settingsDraft, language });
   };
 
+  const handleWorkModeSecondsChange = (
+    field: string,
+    seconds: number,
+  ): void => {
+    setSettingsDraft({
+      ...settingsDraft,
+      [field]: seconds,
+    });
+  };
+
   const handleSave = async () => {
     await ipcRenderer.invokeSetSettings(settingsDraft);
     setLanguage(settingsDraft.language);
@@ -170,6 +181,12 @@ export default function SettingsEl() {
               onDateChange={handleDateChange}
               onTextChange={handleTextChange}
               onSwitchChange={handleSwitchChange}
+            />
+
+            <WorkModeCard
+              settingsDraft={settingsDraft}
+              onSwitchChange={handleSwitchChange}
+              onWorkModeSecondsChange={handleWorkModeSecondsChange}
             />
 
             <SmartBreaksCard

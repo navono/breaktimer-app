@@ -8,6 +8,7 @@ import {
   NotificationType,
   Settings,
   SoundType,
+  WorkMode,
 } from "../../types/settings";
 import { sendIpc } from "./ipc";
 import { t } from "./i18n";
@@ -36,6 +37,17 @@ let startedFromTray = false;
 
 let lastCompletedBreakTime: Date | null = new Date();
 let currentBreakStartTime: Date | null = null;
+let currentWorkMode: WorkMode = WorkMode.Sitting;
+
+export function getWorkMode(): WorkMode {
+  return currentWorkMode;
+}
+
+export function setWorkMode(mode: WorkMode): void {
+  currentWorkMode = mode;
+  log.info(`Work mode set to ${mode}`);
+  buildTray();
+}
 
 export function getBreakTime(): BreakTime {
   return breakTime;
@@ -113,6 +125,13 @@ function getIdleResetSeconds(): number {
 
 function getBreakSeconds(): number {
   const settings: Settings = getSettings();
+  if (settings.workModeEnabled) {
+    const seconds =
+      currentWorkMode === WorkMode.Sitting
+        ? settings.sittingFrequencySeconds
+        : settings.standingFrequencySeconds;
+    return getSecondsFromSettings(seconds);
+  }
   return getSecondsFromSettings(settings.breakFrequencySeconds);
 }
 
@@ -160,12 +179,16 @@ export function scheduleNextBreak(isPostpone = false): void {
 
   const seconds = isPostpone
     ? settings.postponeLengthSeconds
-    : settings.breakFrequencySeconds;
+    : settings.workModeEnabled
+      ? currentWorkMode === WorkMode.Sitting
+        ? settings.sittingFrequencySeconds
+        : settings.standingFrequencySeconds
+      : settings.breakFrequencySeconds;
 
   breakTime = moment().add(seconds, "seconds");
 
   log.info(
-    `Scheduling next break [isPostpone=${isPostpone}] [seconds=${seconds}] [postponeLength=${settings.postponeLengthSeconds}] [frequency=${settings.breakFrequencySeconds}] [scheduledFor=${breakTime.format("HH:mm:ss")}]`,
+    `Scheduling next break [isPostpone=${isPostpone}] [seconds=${seconds}] [postponeLength=${settings.postponeLengthSeconds}] [frequency=${settings.breakFrequencySeconds}] [workMode=${settings.workModeEnabled ? currentWorkMode : "off"}] [scheduledFor=${breakTime.format("HH:mm:ss")}]`,
   );
 
   buildTray();
@@ -182,6 +205,9 @@ export function endPopupBreak(): void {
   const now = moment();
   havingBreak = false;
   startedFromTray = false;
+
+  // Alternate work mode after break ends
+  alternateWorkMode();
 
   // If there's no future break scheduled, create a normal break
   if (!existingBreakTime || existingBreakTime <= now) {
@@ -206,11 +232,22 @@ export function postponeBreak(action = "snoozed"): void {
 
   if (action === "skipped") {
     log.info("Creating break with normal frequency");
+    // Skipping means the current work period ends, alternate mode
+    alternateWorkMode();
     scheduleNextBreak();
   } else {
     log.info("Creating break with postpone length");
     scheduleNextBreak(true);
   }
+}
+
+function alternateWorkMode(): void {
+  const settings: Settings = getSettings();
+  if (!settings.workModeEnabled) return;
+
+  currentWorkMode =
+    currentWorkMode === WorkMode.Sitting ? WorkMode.Standing : WorkMode.Sitting;
+  log.info(`Work mode alternated to ${currentWorkMode}`);
 }
 
 function doBreak(): void {
@@ -238,6 +275,7 @@ function doBreak(): void {
     }
     markBreakCompleted("Break completed [type=notification]");
     havingBreak = false;
+    alternateWorkMode();
     scheduleNextBreak();
   }
 

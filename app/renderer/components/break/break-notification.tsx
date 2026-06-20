@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { WorkMode } from "../../../types/settings";
 import { t } from "../../lib/i18n";
 import { formatTimeSinceLastBreak } from "./utils";
 
@@ -18,6 +19,7 @@ interface BreakNotificationProps {
   timeSinceLastBreak: number | null;
   textColor: string;
   backgroundColor: string;
+  nextWorkMode?: WorkMode | null;
 }
 
 export function BreakNotification({
@@ -30,6 +32,7 @@ export function BreakNotification({
   timeSinceLastBreak,
   textColor,
   backgroundColor,
+  nextWorkMode,
 }: BreakNotificationProps) {
   const [phase, setPhase] = useState<"grace" | "countdown">("grace");
   const [msRemaining, setMsRemaining] = useState<number>(0);
@@ -111,6 +114,19 @@ export function BreakNotification({
               style={{ color: textColor }}
             >
               {formatTimeSinceLastBreak(timeSinceLastBreak)}
+            </p>
+          )}
+          {nextWorkMode && (
+            <p
+              className="text-sm opacity-80 font-medium"
+              style={{ color: textColor }}
+            >
+              {t("nextWorkModeAfterBreak", {
+                mode:
+                  nextWorkMode === WorkMode.Sitting
+                    ? t("sitting")
+                    : t("standing"),
+              })}
             </p>
           )}
         </div>

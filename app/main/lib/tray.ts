@@ -3,12 +3,13 @@ import log from "electron-log";
 import moment from "moment";
 import path from "path";
 import packageJson from "../../../package.json";
-import { TrayTextMode } from "../../types/settings";
+import { TrayTextMode, WorkMode } from "../../types/settings";
 import {
   checkIdle,
   checkInWorkingHours,
   getBreakTime,
   getTimeSinceLastCompletedBreak,
+  getWorkMode,
   isHavingBreak,
   startBreakNow,
 } from "./breaks";
@@ -92,12 +93,18 @@ function getTrayTitle(): string | null {
       if (breakTime === null) return null;
 
       const secondsLeft = Math.max(breakTime.diff(moment(), "seconds"), 0);
-      return ` ${formatCompactDuration(secondsLeft)}`;
+      const modePrefix = settings.workModeEnabled
+        ? (getWorkMode() === WorkMode.Sitting ? "🪑" : "🧍") + " "
+        : "";
+      return ` ${modePrefix}${formatCompactDuration(secondsLeft)}`;
     }
     case TrayTextMode.TimeSinceLastBreak: {
       const secondsSinceLastBreak = getTimeSinceLastCompletedBreak();
       if (secondsSinceLastBreak === null) return null;
-      return ` ${formatCompactDuration(secondsSinceLastBreak)}`;
+      const modePrefix = settings.workModeEnabled
+        ? (getWorkMode() === WorkMode.Sitting ? "🪑" : "🧍") + " "
+        : "";
+      return ` ${modePrefix}${formatCompactDuration(secondsSinceLastBreak)}`;
     }
     default:
       return null;
@@ -212,6 +219,18 @@ export function buildTray(): void {
     {
       label: nextBreak,
       visible:
+        breakTime !== null &&
+        inWorkingHours &&
+        settings.breaksEnabled &&
+        !havingBreak,
+      enabled: false,
+    },
+    {
+      label: t("currentMode", {
+        mode: getWorkMode() === WorkMode.Sitting ? t("sitting") : t("standing"),
+      }),
+      visible:
+        settings.workModeEnabled &&
         breakTime !== null &&
         inWorkingHours &&
         settings.breaksEnabled &&
